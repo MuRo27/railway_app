@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"    
+      xmlns:h="http://java.sun.com/jsf/html">
+	
+    <h:head>
+    	<title>Session Timeout</title>
+    </h:head>
+    <h:body>
+    	<h2>Session has expired! Wait 5 seconds, you'll be redirected to the home page.</h2>
+    	<script type="text/javascript">
+    	
+	    	function returnToHomepage() {
+	                window.location.href = "#{request.contextPath}/coach.xhtml?faces-redirect=true";
+	                return;
+	    	}
+	    	
+    		setTimeout("returnToHomepage()", 5000);
+		
+    	</script>
+    </h:body>
+</html>

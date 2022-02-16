@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<system-libraries>
+    <library path="/Users/marghe943/glassfish5/glassfish/modules/javax.el.jar" source="/Users/marghe943/.m2/repository/org/glassfish/javax.el/3.0.1-b08/javax.el-3.0.1-b08-sources.jar"/>
+    <library path="/Users/marghe943/glassfish5/glassfish/modules/javax.faces.jar" source="/Users/marghe943/.m2/repository/org/glassfish/javax.faces/2.3.2/javax.faces-2.3.2-sources.jar"/>
+    <library path="/Users/marghe943/glassfish5/glassfish/modules/weld-osgi-bundle.jar" source="/Users/marghe943/.m2/repository/org/jboss/weld/weld-osgi-bundle/3.0.0.Final/weld-osgi-bundle-3.0.0.Final-sources.jar"/>
+</system-libraries>

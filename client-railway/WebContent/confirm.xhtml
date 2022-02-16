@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"    
+      	xmlns:ui="http://java.sun.com/jsf/facelets"
+	   	xmlns:f="http://java.sun.com/jsf/core"
+	    xmlns:h="http://java.sun.com/jsf/html"
+	    xmlns:p="http://primefaces.org/ui">
+	
+    <h:head>
+    	<title>Confirm Page</title>
+    </h:head>
+    <h:body>
+		<h:outputStylesheet name="css/styles.css" />
+
+		<h:form id="confirmForm">
+			<h:panelGrid id="confirmPanel" columns="1" cellpadding="5" styleClass="centered panelBody confirmPanel">
+				<p:graphicImage id="checkIcon" name="images/checkIcon.png" class="ui-icon" style="height:3em; width:3em;"/>    
+				<p:outputLabel id="congratulationMessage" value="#{msg['congratulations']}" class="congratulationMessage"/>
+					
+				<h:panelGrid id="panelPersonalInfoConfirm" columns="2" cellpadding="5" styleClass="centered confirmPanel"> 
+					<p:outputLabel id="firstname" value="#{sessionScope['firstname']}" class="personalInfo"/>
+					<p:outputLabel id="lastname" value="#{sessionScope['lastname']}" class="personalInfo"/>
+				</h:panelGrid>	
+					
+				<p:dataTable id="bookedTable" var="seat" value="#{sessionScope['selectedSeats']}" styleClass="centered">
+					<p:column headerText="SeatId">
+						<h:outputText value="#{seat.id}" />
+					</p:column>
+						 
+					<p:column headerText="Status">
+						<h:outputText value="#{seat.status eq 2? 'booked': 'error'}" />
+					</p:column>
+						 
+					<p:column headerText="Coach">
+						<h:outputText value="#{seat.coachID}" />
+					</p:column>
+						 
+<!-- 					<p:column headerText="SessionId"> -->
+<!-- 						<h:outputText value="#{seat.sessionID}" /> -->
+<!-- 					</p:column> -->
+						    
+					<p:column headerText="BookingId">
+						<h:outputText value="#{seat.bookingID}" />
+					</p:column>
+				</p:dataTable>
+				
+				<p:button id="homeButton" outcome="coach" value="Go home" icon="pi pi-home" class="centeredButton"/>
+<!-- 				<p:outputLabel value="#{window.getWindowID()}"/> -->
+			</h:panelGrid>
+		
+		    		        
+		</h:form>
+    </h:body>
+</html>

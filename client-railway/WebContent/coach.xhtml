@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:p="http://primefaces.org/ui">
+ 
+ 
+<h:head>
+    <title>Railway Booking</title>
+    <meta http-equiv="refresh" content="#{facesContext.externalContext.sessionMaxInactiveInterval};url=#{request.contextPath}/sessionTimeout.xhtml?faces-redirect=true"/>
+</h:head>
+<h:body>
+	<h:outputStylesheet name="css/styles.css" />
+	<script type="text/javascript">
+	
+		//onpagehide could be better, but is not supported by Chrome and Safari.
+		window.onbeforeunload = function(){
+			exitOnBeforeUnload();
+		};
+		
+	</script>
+<!-- 	<ui:include src="/templates/sessionTimeoutHandler.xhtml"/> -->
+    
+    
+	<h:form id="formMessages">
+		<p:growl id="growl" showDetail="true" sticky="true">
+			<p:autoUpdate />
+		</p:growl>  
+	</h:form>
+ 
+	<h:panelGrid id="panelBody" columns="1" cellpadding="5" styleClass="centered panelBody">
+		
+		<h:form id="formPersonalInfo">
+			
+			<h:panelGrid id="panelPersonalInfo" columns="3" cellpadding="5" layout="grid">
+				
+					<p:outputLabel for="firstname" value="Firstname:"/> 
+					<p:inputText id="firstname" value="#{user.firstname}" placeholder="Insert your firstname" required="true">
+						<f:validator validatorId="nameValidator" />
+		                <p:ajax update="msgFirstname" event="keyup" />
+		            </p:inputText>
+		            <p:message for="firstname" id="msgFirstname" display="icon" />
+		            
+		            <p:outputLabel for="lastname" value="Lastname:"/> 
+				   	<p:inputText id="lastname" value="#{user.lastname}" placeholder="Insert your lastname" required="true">
+		        		<f:validator validatorId="nameValidator" />
+		                <p:ajax update="msgLastname" event="keyup" />
+		            </p:inputText>
+		            <p:message for="lastname" id="msgLastname" display="icon" />
+		            
+		            <p:outputLabel for="userCode" value="User Code:"/> 
+		            <p:inputText id="userCode" value="#{user.userCode}" placeholder="Insert your userCode" required="true">
+		        		<f:validator validatorId="italianUserCodeValidator" />
+		                <p:ajax update="msgUserCode" event="keyup" />
+		            </p:inputText>
+		            <p:message for="userCode" id="msgUserCode" display="icon" />
+		        	
+		        	<p:commandButton value="Submit" process="@this panelPersonalInfo" update="panelPersonalInfo formCoach formGridSeats" action="#{user.submit}"/>
+		       
+<!-- 		       		<p:outputLabel value ="#{sessionScope['tabsOpened']}" style="background-color: yellow"/> -->
+<!-- 		       		<p:outputLabel value="#{sessionScope['hasSubmitted']}" style="background-color: red"/> -->
+<!-- 		        	<p:outputLabel value="#{sessionScope['hasSubmitted'] and sessionScope['tabsOpened'].get(window.getWindowID())}" style="background-color: green"/> -->
+			</h:panelGrid>        	
+	    </h:form>
+   
+	    <h:form id="formCoach">
+	        
+	      		<h:panelGrid id="panelCoach" columns="2" cellpadding="5" rendered="#{sessionScope['hasSubmitted'] and sessionScope['tabsOpened'].get(window.getWindowID())}">
+			    	
+				    	<p:outputLabel value="Multiple Selection:" />
+						<p:toggleSwitch id="toggleSwitchMoreSeats" value="#{coachParameters.selectMoreSeats}">
+							<f:attribute name="selectedCoach" value="#{coachParameters.selectedCoach}" />
+							<f:attribute name="howManySeats" value="#{coachParameters.howManySeatsToSelect}" />
+						    <f:attribute name="selectMoreSeats" value="#{coachParameters.selectMoreSeats}" />
+						    <p:ajax process="toggleSwitchMoreSeats formCoach" onstart="checkSeatSelectionConsistency()" update=":formGridSeats:panelSeats panelCoach" listener="#{coach.onCoachParametersChange}"/>
+						</p:toggleSwitch>
+						
+					
+						<p:outputLabel value="Coach:" />
+						<p:selectOneMenu id="coach" value="#{coachParameters.selectedCoach}">
+							<f:selectItem itemLabel="Select Coach" itemValue="" noSelectionOption="true" />
+						    <f:selectItems value="#{coachParameters.coaches}" />
+						    <f:attribute name="selectedCoach" value="#{coachParameters.selectedCoach}" />
+							<f:attribute name="howManySeats" value="#{coachParameters.howManySeatsToSelect}" />
+						    <f:attribute name="selectMoreSeats" value="#{coachParameters.selectMoreSeats}" />
+						    <p:ajax event="itemSelect" listener="#{coach.onCoachParametersChange}" process="formCoach" update="formGridSeats panelCoach"/>
+						 </p:selectOneMenu>
+						    
+						<p:outputLabel value="How many seats:" rendered="#{coachParameters.selectMoreSeats}"/>
+						<p:selectOneMenu id="minMaxSeats" value="#{coachParameters.howManySeatsToSelect}" rendered="#{coachParameters.selectMoreSeats}">
+							<f:selectItem itemLabel="Select how many seats" itemValue="" noSelectionOption="true" />
+							<f:selectItems value="#{coachParameters.howManySeats}" />
+							<f:attribute name="selectedCoach" value="#{coachParameters.selectedCoach}" />
+							<f:attribute name="howManySeats" value="#{coachParameters.howManySeatsToSelect}" />
+						    <f:attribute name="selectMoreSeats" value="#{coachParameters.selectMoreSeats}" />
+						    <p:ajax event="itemSelect" onstart="checkSeatSelectionConsistency()" listener="#{coach.onCoachParametersChange}" process="formCoach" update=":formGridSeats:panelSeats panelCoach"/>
+						</p:selectOneMenu>
+						
+						<p:remoteCommand  id="checkSeatSelectionConsistency" name="checkSeatSelectionConsistency" process="@this" update="@parent" action="#{coachParameters.checkSeatSelectionConsistency}"/>
+				</h:panelGrid>
+        	</h:form>
+        	
+        <h:form id="formGridSeats">
+	        <h:panelGrid id="panelSeats" styleClass="centered panelSeats" columns="1" cellpadding="5" rendered="#{sessionScope['hasSubmitted'] and sessionScope['tabsOpened'].get(window.getWindowID())}">
+	        	
+		        	<p:dataGrid id="gridSeatsUp" var="seat" value="#{coach.seatsUp}" columns="4" layout="grid" styleClass="centered">
+			        	<p:column>
+							<p:commandButton value="#{seat.id}" disabled = "#{seat.status eq 0? false : (seat.sessionID eq coach.currentSessionID? (seat.bookingID eq sessionScope['bookedID']? false : true):true)}" process="formGridSeats" update="formGridSeats:panelSeats" styleClass="#{seat.status eq 0 ? 'free' : (seat.status eq 1 ? (seat.sessionID eq coach.currentSessionID ? 'my-reserved' : 'not-available') : 'not-available')}" action="#{coach.onClickSeat()}">
+								<f:param name="coachID" value="#{seat.coachID}"/>
+								<f:param name="seatID" value="#{seat.id}"/>
+								<f:param name="status" value="#{seat.status}"/>
+							</p:commandButton>
+						</p:column>
+		        	</p:dataGrid>
+		        	
+		        	<div id="hallway"></div>
+		        	
+		        	<p:dataGrid id="gridSeatsDown" var="seat" value="#{coach.seatsDown}" columns="4" layout="grid" styleClass="centered">
+			        	<p:column>
+							<p:commandButton value="#{seat.id}" disabled = "#{seat.status eq 0? false : (seat.sessionID eq coach.currentSessionID? (seat.bookingID eq sessionScope['bookedID']? false : true):true)}" process="formGridSeats" update="formGridSeats:panelSeats" styleClass="#{seat.status eq 0 ? 'free' : (seat.status eq 1 ? (seat.sessionID eq coach.currentSessionID ? 'my-reserved' : 'not-available') : 'not-available')}" action="#{coach.onClickSeat()}">
+								<f:param name="coachID" value="#{seat.coachID}"/>
+								<f:param name="seatID" value="#{seat.id}"/>
+								<f:param name="status" value="#{seat.status}"/>
+							</p:commandButton>
+						</p:column>
+		        	</p:dataGrid>	
+		              
+		     </h:panelGrid> 
+		     
+		     <h:panelGrid id="panelButtons" columns="2" cellpadding="5" rendered="#{sessionScope['hasSubmitted'] and sessionScope['tabsOpened'].get(window.getWindowID())}" styleClass="centered">    	
+		        	<p:commandButton value="Refresh coach" icon="pi pi-refresh" process="@this" update="@form" action="#{coach.refreshCoach()}"/>
+		        	<p:commandButton value="Confirm" process="@this" action="#{coach.confirm()}"/>
+		        	<p:remoteCommand  id="exitOnBeforeUnload" name="exitOnBeforeUnload" process="@this" partialSubmit="true"  action="#{window.freeReservedSeats()}"/>
+			</h:panelGrid>   
+        </h:form>
+
+	</h:panelGrid>
+	
+	
+</h:body>
+</html>

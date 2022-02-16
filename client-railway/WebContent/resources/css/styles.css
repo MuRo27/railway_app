@@ -1,0 +1,78 @@
+body{
+	background-image: url(../images/bg2.jpeg.xhtml);
+	background-size: cover;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only.not-available{
+	background-color: #d3d2d4;
+	background-image: none;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only.my-reserved{
+	background-color: #3dc9f3;
+	background-image: none;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only.free{
+   background-color: #48db33;
+   background-image: none;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-icon-left.centeredButton{
+	margin: 0 auto;
+}
+
+
+.centered{
+	margin: 0 auto;
+}
+
+.panelSeats{
+	border-style: solid;
+}
+
+#hallway{
+	background-color: #efe9e9a6; 
+	height: 10px;
+}
+
+.panelBody.confirmPanel{
+	text-align: center;
+	width: 50%;
+}
+
+.panelBody{
+	background-color: #bdd3e4ba;
+	border-radius: 3%;
+}
+
+.ui-outputlabel.ui-widget.congratulationMessage{
+	font-weight: bold;
+    font-size: xx-large;
+}
+
+.ui-outputlabel.ui-widget.personalInfo{
+	font-weight: bold;
+    font-size: x-large;
+}
+
+.ui-datatable{
+	width: 60%;
+}
+
+body .ui-datatable thead th{
+	border: solid;
+}
+
+body .ui-datatable .ui-datatable-data>tr>td{
+	border: solid;
+}
+
+body .ui-selectonemenu{
+	min-width: 0px !important;
+}
+
+body .ui-datagrid .ui-datagrid-content{
+	border: transparent;
+    background-color: transparent;
+}
